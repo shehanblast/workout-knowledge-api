@@ -1,0 +1,38 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model MuscleGroup {
+  id        Int        @id @default(autoincrement())
+  name      String     @unique
+  exercises Exercise[]
+}
+
+model Equipment {
+  id        Int        @id @default(autoincrement())
+  name      String     @unique
+  exercises Exercise[]
+
+}
+
+model Exercise {
+  id              Int    @id @default(autoincrement())
+  slug            String @unique
+  name            String
+  description     String?
+  difficulty      String
+  muscleGroupId   Int
+  equipmentId     Int?
+  muscleGroup     MuscleGroup @relation(fields: [muscleGroupId], references: [id])
+  equipment       Equipment?  @relation(fields: [equipmentId], references: [id])
+}
